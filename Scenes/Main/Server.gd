@@ -16,12 +16,14 @@ func start_server():
 	multiplayer.peer_connected.connect(_peer_connected)
 	multiplayer.peer_disconnected.connect(_peer_disconnected)
 	
-	print(self.is_multiplayer_authority())
-	
 
 func _peer_connected(player_id):
 	print("User", str(player_id), "Connected")
 	
 func _peer_disconnected(player_id):
 	print("User", str(player_id), "Disconnected")
-	
+
+
+@rpc("any_peer")
+func get_location(location : Vector2):
+	print(multiplayer.get_remote_sender_id(), " > ", location)
