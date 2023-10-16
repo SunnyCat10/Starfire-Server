@@ -18,7 +18,3 @@ config/icon="res://icon.svg"
 [dotnet]
 
 project/assembly_name="Starfire Server"
-
-[physics]
-
-common/physics_ticks_per_second=20
