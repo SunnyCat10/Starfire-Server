@@ -34,10 +34,6 @@ func _peer_disconnected(player_id):
 		get_node(str(player_id)).queue_free()
 		player_state_collection.erase(player_id)
 		despawn_player.rpc(player_id)
-
-@rpc("any_peer")
-func get_location(location : Vector2):
-	print(multiplayer.get_remote_sender_id(), " > ", location)
 	
 
 @rpc("any_peer", "unreliable_ordered") func recive_player_state(player_state):

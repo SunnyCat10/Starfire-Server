@@ -1,2 +1,3 @@
 res://Scenes/Main/Server.tscn
 res://Scenes/Main/StateProcessing.gd
+res://Scenes/Main/Server.gd
