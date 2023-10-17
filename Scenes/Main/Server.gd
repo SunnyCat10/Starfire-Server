@@ -8,7 +8,7 @@ var player_state_collection = {}
 
 @rpc func spawn_new_player(player_id : int, position : Vector2): pass
 @rpc func despawn_player(player_id: int): pass
-@rpc func recive_world_state(world_state): pass
+@rpc("unreliable_ordered") func recive_world_state(world_state): pass
 
 
 func _ready():
@@ -36,13 +36,14 @@ func _peer_disconnected(player_id):
 		despawn_player.rpc(player_id)
 	
 
-@rpc("any_peer") func recive_player_state(player_state):
+@rpc("any_peer", "unreliable_ordered") func recive_player_state(player_state):
 	var player_id : int = multiplayer.get_remote_sender_id()
-	if player_state_collection.has(player_id):
-		if player_state_collection[player_id]["T"] < player_state["T"]:
-			player_state_collection[player_id] = player_state
-	else:
-		player_state_collection[player_id] = player_state
+#	if player_state_collection.has(player_id):
+#		if player_state_collection[player_id]["T"] < player_state["T"]:
+#			player_state_collection[player_id] = player_state
+#	else:
+#		player_state_collection[player_id] = player_state
+	player_state_collection[player_id] = player_state
 		
 func send_world_state(world_state):
 	recive_world_state.rpc(world_state)

@@ -9,7 +9,7 @@ func _physics_process(delta):
 		world_state = server.player_state_collection.duplicate(true)
 		for player in world_state.keys():
 			world_state[player].erase("T")
-		world_state["T"] = Time.get_unix_time_from_datetime_string(Time.get_time_string_from_system())
+		world_state["T"] = Time.get_unix_time_from_system()
 		# Verification
 		# Anti-Cheat
 		# Cuts ( chunking / maps )
