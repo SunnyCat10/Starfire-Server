@@ -24,7 +24,6 @@ func start_server():
 
 
 func _peer_connected(player_id):
-	spawn_new_player.rpc(player_id, Vector2(10,10))
 	print("User", str(player_id), "Connected")
 
 
@@ -47,3 +46,7 @@ func _peer_disconnected(player_id):
 		
 func send_world_state(world_state):
 	recive_world_state.rpc(world_state)
+	
+
+@rpc("any_peer", "reliable") func player_joined_map(player_id : int): 
+	spawn_new_player.rpc(player_id, Vector2(10,10))
