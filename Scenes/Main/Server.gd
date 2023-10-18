@@ -48,5 +48,8 @@ func send_world_state(world_state):
 	recive_world_state.rpc(world_state)
 	
 
-@rpc("any_peer", "reliable") func player_joined_map(player_id : int): 
+@rpc("any_peer", "reliable") func player_joined_map(player_id : int):
+	var new_player : Node2D = Node2D.new()
+	new_player.name = str(player_id)
+	add_child(new_player)
 	spawn_new_player.rpc(player_id, Vector2(10,10))
