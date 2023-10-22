@@ -9,6 +9,8 @@ var player_state_collection = {}
 @rpc func spawn_new_player(player_id : int, position : Vector2): pass
 @rpc func despawn_player(player_id: int): pass
 @rpc("unreliable_ordered") func recive_world_state(world_state): pass
+@rpc("reliable") func return_server_time(server_time : float, client_time : float): pass
+@rpc func return_latency(client_time : float): pass
 
 
 func _ready():
@@ -53,3 +55,13 @@ func send_world_state(world_state):
 	new_player.name = str(player_id)
 	add_child(new_player)
 	spawn_new_player.rpc(player_id, Vector2(10,10))
+
+
+@rpc("any_peer", "reliable") func fetch_server_time(client_time : float):
+	var player_id : int = multiplayer.get_remote_sender_id()
+	return_server_time.rpc_id(player_id, Time.get_unix_time_from_system(), client_time)
+
+
+@rpc("any_peer") func determine_latency(client_time : float):
+	var player_id : int = multiplayer.get_remote_sender_id()
+	return_latency.rpc_id(player_id, client_time)
