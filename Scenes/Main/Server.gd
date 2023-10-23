@@ -11,6 +11,7 @@ var player_state_collection = {}
 @rpc("unreliable_ordered") func recive_world_state(world_state): pass
 @rpc("reliable") func return_server_time(server_time : float, client_time : float): pass
 @rpc func return_latency(client_time : float): pass
+@rpc("reliable") func receive_attack(position : Vector2, rotation : float, spawn_time : float, player_id : int): pass
 
 
 func _ready():
@@ -65,3 +66,8 @@ func send_world_state(world_state):
 @rpc("any_peer") func determine_latency(client_time : float):
 	var player_id : int = multiplayer.get_remote_sender_id()
 	return_latency.rpc_id(player_id, client_time)
+
+
+@rpc("any_peer", "reliable") func attack(position : Vector2, rotation : float, client_time : float): 
+	var player_id : int = multiplayer.get_remote_sender_id()
+	receive_attack.rpc(position, rotation, client_time, player_id)
