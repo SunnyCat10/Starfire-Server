@@ -11,3 +11,5 @@ script = ExtResource("1_jw14j")
 script = ExtResource("2_idsod")
 
 [node name="ServerMap" parent="." instance=ExtResource("3_unsip")]
+
+[node name="Camera2D" type="Camera2D" parent="."]
