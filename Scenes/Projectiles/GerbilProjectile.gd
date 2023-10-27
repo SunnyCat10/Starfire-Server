@@ -22,7 +22,7 @@ func on_impact(body: Node2D) -> void:
 	if body.name != str(player_id):
 		print(body.name,"was hit by projectile owned by", player_id)
 		if body.is_in_group("players"):
-			server.send_damage(player_id, damage)
+			server.send_damage(body.name.to_int(), damage)
 		destroy_projectile()
 
 
