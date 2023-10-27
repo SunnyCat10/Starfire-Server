@@ -1,3 +1,10 @@
 res://Scenes/Main/Server.tscn
 res://Scenes/Main/Server.gd
 res://Scenes/Main/StateProcessing.gd
+res://Scenes/Projectiles/GerbilProjectile.tscn
+res://Scenes/Environment/CobbleCorner.tscn
+res://Scenes/Environment/CobbleWall.tscn
+res://Scenes/Projectiles/GerbilProjectile.gd
+res://Scenes/Entities/remote_player.tscn
+res://Maps/ServerMap.gd
+res://Maps/ServerMap.tscn

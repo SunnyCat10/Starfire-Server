@@ -6,6 +6,9 @@ const MAX_PLAYERS : int = 10
 
 var player_state_collection = {}
 var connected_player_list = {}
+
+var remote_player_instance = preload("res://Scenes/Entities/remote_player.tscn")
+
 @rpc func spawn_new_player(player_id : int, position : Vector2): pass
 @rpc func despawn_player(player_id: int): pass
 @rpc("unreliable_ordered") func recive_world_state(world_state): pass
@@ -55,11 +58,11 @@ func send_world_state(world_state):
 	
 
 @rpc("any_peer", "reliable") func player_joined_map(player_id : int):
-	var new_player : Node2D = Node2D.new()
+	var new_player : Node2D = remote_player_instance.instantiate()
 	new_player.name = str(player_id)
 	add_child(new_player)
 	spawn_new_player.rpc(player_id, Vector2(10,10))	
-	connected_player_list[str(player_id)] = str(player_id)
+	connected_player_list[str(player_id)] = new_player
 	update_ui_player.rpc(connected_player_list)
 
 

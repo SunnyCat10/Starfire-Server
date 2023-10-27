@@ -9,4 +9,5 @@ func spawn_attack(position : Vector2, rotation : float, client_time : float, pla
 	var projectile_instance : Node2D = gerbil_projectile.instantiate()
 	projectile_instance.position = position
 	projectile_instance.rotation = rotation
+	projectile_instance.player_id = player_id
 	add_child(projectile_instance)

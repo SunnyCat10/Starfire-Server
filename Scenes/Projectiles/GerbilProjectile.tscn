@@ -7,11 +7,21 @@ size = Vector2(6, 4)
 
 [node name="GerbilProjectile" type="RigidBody2D"]
 collision_layer = 16
-collision_mask = 3
+collision_mask = 11
 gravity_scale = 0.0
 max_contacts_reported = 1
 contact_monitor = true
 script = ExtResource("1_ce4ds")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_rsplt")
+debug_color = Color(0.94902, 0.207843, 0.227451, 0.419608)
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 11
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_rsplt")
+debug_color = Color(0.94902, 0.207843, 0.227451, 0.419608)
