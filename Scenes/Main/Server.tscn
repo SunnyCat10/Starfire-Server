@@ -1,10 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://cblxtj6q7u1ad"]
+[gd_scene load_steps=4 format=3 uid="uid://cblxtj6q7u1ad"]
 
 [ext_resource type="Script" path="res://Scenes/Main/Server.gd" id="1_jw14j"]
 [ext_resource type="Script" path="res://Scenes/Main/StateProcessing.gd" id="2_idsod"]
+[ext_resource type="PackedScene" uid="uid://d167vxkpo4kae" path="res://Maps/ServerMap.tscn" id="3_unsip"]
 
 [node name="Server" type="Node"]
 script = ExtResource("1_jw14j")
 
 [node name="StateProcessing" type="Node" parent="."]
 script = ExtResource("2_idsod")
+
+[node name="ServerMap" parent="." instance=ExtResource("3_unsip")]

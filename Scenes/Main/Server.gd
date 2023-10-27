@@ -62,6 +62,7 @@ func send_world_state(world_state):
 	connected_player_list[str(player_id)] = str(player_id)
 	update_ui_player.rpc(connected_player_list)
 
+
 @rpc("any_peer", "reliable") func fetch_server_time(client_time : float):
 	var player_id : int = multiplayer.get_remote_sender_id()
 	return_server_time.rpc_id(player_id, Time.get_unix_time_from_system(), client_time)
@@ -74,4 +75,5 @@ func send_world_state(world_state):
 
 @rpc("any_peer", "reliable") func attack(position : Vector2, rotation : float, client_time : float): 
 	var player_id : int = multiplayer.get_remote_sender_id()
+	get_node("ServerMap").spawn_attack(position, rotation, client_time, player_id)
 	receive_attack.rpc(position, rotation, client_time, player_id)

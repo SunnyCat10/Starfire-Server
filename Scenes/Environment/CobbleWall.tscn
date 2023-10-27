@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://meuaqd7lo8et"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wv24k"]
+size = Vector2(64, 16)
+
+[node name="CobbleWall" type="StaticBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_wv24k")

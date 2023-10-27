@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://7e764jsk2gcn"]
+
+[ext_resource type="Script" path="res://Scenes/Projectiles/GerbilProjectile.gd" id="1_ce4ds"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rsplt"]
+size = Vector2(6, 4)
+
+[node name="GerbilProjectile" type="RigidBody2D"]
+collision_layer = 16
+collision_mask = 3
+gravity_scale = 0.0
+max_contacts_reported = 1
+contact_monitor = true
+script = ExtResource("1_ce4ds")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_rsplt")
