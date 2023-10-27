@@ -16,6 +16,7 @@ var remote_player_instance = preload("res://Scenes/Entities/remote_player.tscn")
 @rpc func return_latency(client_time : float): pass
 @rpc("reliable") func receive_attack(position : Vector2, rotation : float, spawn_time : float, player_id : int): pass
 @rpc("reliable") func update_ui_player(player_list: Dictionary): pass
+@rpc("reliable") func receive_damage(damage: int): pass
 
 
 func _ready():
@@ -42,20 +43,20 @@ func _peer_disconnected(player_id):
 		despawn_player.rpc(player_id)
 		connected_player_list.erase(str(player_id))
 		update_ui_player.rpc(connected_player_list)
-	
+
+
+func send_world_state(world_state):
+	recive_world_state.rpc(world_state)
+
+
+func send_damage(player_id: int, damage: int):
+	receive_damage.rpc_id(player_id, damage)
+
 
 @rpc("any_peer", "unreliable_ordered") func recive_player_state(player_state):
 	var player_id : int = multiplayer.get_remote_sender_id()
-#	if player_state_collection.has(player_id):
-#		if player_state_collection[player_id]["T"] < player_state["T"]:
-#			player_state_collection[player_id] = player_state
-#	else:
-#		player_state_collection[player_id] = player_state
 	player_state_collection[player_id] = player_state
-		
-func send_world_state(world_state):
-	recive_world_state.rpc(world_state)
-	
+
 
 @rpc("any_peer", "reliable") func player_joined_map(player_id : int):
 	var new_player : Node2D = remote_player_instance.instantiate()

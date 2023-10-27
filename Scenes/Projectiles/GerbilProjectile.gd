@@ -1,11 +1,14 @@
 extends RigidBody2D
 
+@onready var area2d :Area2D = $Area2D
+@onready var server : Node = get_parent().get_parent()
 
 var speed : float = 200
 var life_time = 1.0
 var impulse_rotation
 var player_id : int
-@onready var area2d :Area2D = $Area2D
+var damage = 10
+
 
 func _ready():
 #	body_entered.connect(on_impact)
@@ -19,8 +22,7 @@ func on_impact(body: Node2D) -> void:
 	if body.name != str(player_id):
 		print(body.name,"was hit by projectile owned by", player_id)
 		if body.is_in_group("players"):
-			print("Hit player") # TODO SEND RPC
-		
+			server.send_damage(player_id, damage)
 		destroy_projectile()
 
 
