@@ -5,13 +5,14 @@ const PORT : int = 34684
 const MAX_PLAYERS : int = 10
 
 var player_state_collection = {}
-
+var connected_player_list = {}
 @rpc func spawn_new_player(player_id : int, position : Vector2): pass
 @rpc func despawn_player(player_id: int): pass
 @rpc("unreliable_ordered") func recive_world_state(world_state): pass
 @rpc("reliable") func return_server_time(server_time : float, client_time : float): pass
 @rpc func return_latency(client_time : float): pass
 @rpc("reliable") func receive_attack(position : Vector2, rotation : float, spawn_time : float, player_id : int): pass
+@rpc("reliable") func update_ui_player(player_list: Dictionary): pass
 
 
 func _ready():
@@ -36,6 +37,8 @@ func _peer_disconnected(player_id):
 		get_node(str(player_id)).queue_free()
 		player_state_collection.erase(player_id)
 		despawn_player.rpc(player_id)
+		connected_player_list.erase(str(player_id))
+		update_ui_player.rpc(connected_player_list)
 	
 
 @rpc("any_peer", "unreliable_ordered") func recive_player_state(player_state):
@@ -55,8 +58,9 @@ func send_world_state(world_state):
 	var new_player : Node2D = Node2D.new()
 	new_player.name = str(player_id)
 	add_child(new_player)
-	spawn_new_player.rpc(player_id, Vector2(10,10))
-
+	spawn_new_player.rpc(player_id, Vector2(10,10))	
+	connected_player_list[str(player_id)] = str(player_id)
+	update_ui_player.rpc(connected_player_list)
 
 @rpc("any_peer", "reliable") func fetch_server_time(client_time : float):
 	var player_id : int = multiplayer.get_remote_sender_id()
