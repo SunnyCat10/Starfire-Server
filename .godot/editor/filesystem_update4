@@ -1,3 +1,1 @@
-res://Scenes/Main/Server.tscn
-res://Scenes/Projectiles/GerbilProjectile.tscn
-res://Scenes/Projectiles/GerbilProjectile.gd
+res://Scenes/Entities/remote_player.tscn
