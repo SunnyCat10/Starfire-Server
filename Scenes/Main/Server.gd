@@ -9,6 +9,10 @@ var connected_player_list = {}
 
 var remote_player_instance = preload("res://Scenes/Entities/remote_player.tscn")
 
+var lobby_for_testing = {"1" : {"n" : "main test lobby", "g" : "CTF", "c" : 0, "m" : 2},
+"2" : {"n" : "another lobby", "g" : "TDM", "c" : 8, "m" : 8},
+"3": {"n" : "3rd lobby", "g" : "FFA", "c" : 12, "m" : 12}}
+
 @rpc func spawn_new_player(player_id : int, position : Vector2): pass
 @rpc func despawn_player(player_id: int): pass
 @rpc("unreliable_ordered") func recive_world_state(world_state): pass
@@ -17,6 +21,7 @@ var remote_player_instance = preload("res://Scenes/Entities/remote_player.tscn")
 @rpc("reliable") func receive_attack(position : Vector2, rotation : float, spawn_time : float, player_id : int): pass
 @rpc("reliable") func update_ui_player(player_list: Dictionary): pass
 @rpc("reliable") func receive_damage(damage: int): pass
+@rpc("reliable") func receive_lobby_list(lobby_list): pass
 
 
 func _ready():
@@ -81,3 +86,8 @@ func send_damage(player_id: int, damage: int):
 	var player_id : int = multiplayer.get_remote_sender_id()
 	get_node("ServerMap").spawn_attack(position, rotation, client_time, player_id)
 	receive_attack.rpc(position, rotation, client_time, player_id)
+
+
+@rpc("any_peer", "reliable") func get_lobby_list():
+	var player_id : int = multiplayer.get_remote_sender_id()
+	receive_lobby_list.rpc_id(player_id, lobby_for_testing)

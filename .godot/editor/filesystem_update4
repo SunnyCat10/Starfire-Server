@@ -1,1 +1,4 @@
+res://Scenes/Main/Server.tscn
+res://Scenes/Projectiles/GerbilProjectile.tscn
 res://Scenes/Entities/remote_player.tscn
+res://Scenes/Main/Server.gd
