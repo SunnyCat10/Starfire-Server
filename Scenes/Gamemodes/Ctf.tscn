@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bowi26g2ru6bj"]
+
+[ext_resource type="Script" path="res://Scenes/Gamemodes/Ctf.gd" id="1_44j3m"]
+
+[node name="CTF" type="Node"]
+script = ExtResource("1_44j3m")

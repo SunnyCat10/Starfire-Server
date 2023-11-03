@@ -15,6 +15,10 @@ run/main_scene="res://Scenes/Main/Server.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Packets="*res://Scenes/Main/Packets.gd"
+
 [dotnet]
 
 project/assembly_name="Starfire Server"

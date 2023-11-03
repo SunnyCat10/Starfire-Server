@@ -9,9 +9,11 @@ var connected_player_list = {}
 
 var remote_player_instance = preload("res://Scenes/Entities/remote_player.tscn")
 
+# Testing:
 var lobby_for_testing = {"1" : {"n" : "main test lobby", "g" : "CTF", "c" : 0, "m" : 2},
 "2" : {"n" : "another lobby", "g" : "TDM", "c" : 8, "m" : 8},
 "3": {"n" : "3rd lobby", "g" : "FFA", "c" : 12, "m" : 12}}
+@onready var ctf_lobby = $CTF
 
 @rpc func spawn_new_player(player_id : int, position : Vector2): pass
 @rpc func despawn_player(player_id: int): pass
@@ -22,10 +24,12 @@ var lobby_for_testing = {"1" : {"n" : "main test lobby", "g" : "CTF", "c" : 0, "
 @rpc("reliable") func update_ui_player(player_list: Dictionary): pass
 @rpc("reliable") func receive_damage(damage: int): pass
 @rpc("reliable") func receive_lobby_list(lobby_list): pass
+@rpc("reliable") func receive_ctf_start(sorted_player_list , start_time : float): pass
 
 
 func _ready():
-	start_server() 
+	start_server()
+	Packets.gamemode_started.connect(send_ctf_start)
 
 
 func start_server():
@@ -51,11 +55,20 @@ func _peer_disconnected(player_id):
 
 
 func send_world_state(world_state):
-	recive_world_state.rpc(world_state)
+	for player in ctf_lobby.player_list:
+		recive_world_state.rpc_id(player, world_state)
+	# recive_world_state.rpc(world_state)
 
 
 func send_damage(player_id: int, damage: int):
 	receive_damage.rpc_id(player_id, damage)
+
+
+func send_ctf_start(sorted_list, start_time : float):
+	for player in sorted_list[Packets.CTF_TEAM_A]:
+		receive_ctf_start.rpc_id(player, sorted_list, start_time)
+	for player in sorted_list[Packets.CTF_TEAM_B]:
+		receive_ctf_start.rpc_id(player, sorted_list, start_time)
 
 
 @rpc("any_peer", "unreliable_ordered") func recive_player_state(player_state):
@@ -64,6 +77,7 @@ func send_damage(player_id: int, damage: int):
 
 
 @rpc("any_peer", "reliable") func player_joined_map(player_id : int):
+	ctf_lobby.join_lobby(player_id)
 	var new_player : Node2D = remote_player_instance.instantiate()
 	new_player.name = str(player_id)
 	add_child(new_player)
