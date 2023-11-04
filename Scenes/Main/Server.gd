@@ -24,12 +24,14 @@ var lobby_for_testing = {"1" : {"n" : "main test lobby", "g" : "CTF", "c" : 0, "
 @rpc("reliable") func update_ui_player(player_list: Dictionary): pass
 @rpc("reliable") func receive_damage(damage: int): pass
 @rpc("reliable") func receive_lobby_list(lobby_list): pass
-@rpc("reliable") func receive_ctf_start(sorted_player_list , start_time : float): pass
+@rpc("reliable") func receive_ctf_start(sorted_player_list, start_time : float): pass
+@rpc("reliable") func receive_gamemode_update(status_info, status_time : float): pass
 
 
 func _ready():
 	start_server()
 	Packets.gamemode_started.connect(send_ctf_start)
+	Packets.gamemode_update.connect(send_gamemode_update)
 
 
 func start_server():
@@ -71,6 +73,15 @@ func send_ctf_start(sorted_list, start_time : float):
 		receive_ctf_start.rpc_id(player, sorted_list, start_time)
 
 
+func send_gamemode_update(sorted_list, status_info, status_time : float):
+	status_info[Packets.StatusPacket.TEAM_ID] = Packets.CtfTeam.TEAM_A
+	for player in sorted_list[Packets.CtfTeam.TEAM_A]:
+		receive_gamemode_update.rpc_id(player, status_info, status_time)
+	status_info[Packets.StatusPacket.TEAM_ID] = Packets.CtfTeam.TEAM_B
+	for player in sorted_list[Packets.CtfTeam.TEAM_B]:
+		receive_gamemode_update.rpc_id(player, status_info, status_time)
+
+
 @rpc("any_peer", "unreliable_ordered") func recive_player_state(player_state):
 	var player_id : int = multiplayer.get_remote_sender_id()
 	player_state_collection[player_id] = player_state
@@ -105,3 +116,4 @@ func send_ctf_start(sorted_list, start_time : float):
 @rpc("any_peer", "reliable") func get_lobby_list():
 	var player_id : int = multiplayer.get_remote_sender_id()
 	receive_lobby_list.rpc_id(player_id, lobby_for_testing)
+
