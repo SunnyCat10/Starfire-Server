@@ -1,14 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://byvimoyyyioss"]
+[gd_scene load_steps=4 format=3 uid="uid://byvimoyyyioss"]
+
+[ext_resource type="Script" path="res://Scenes/Entities/RemotePlayer.gd" id="1_aungr"]
+[ext_resource type="PackedScene" uid="uid://uut34mp4e781" path="res://Scenes/Managers/FlagManager.tscn" id="1_mokeu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o4wqj"]
 size = Vector2(27, 14)
 
 [node name="RemotePlayer" type="CharacterBody2D" groups=["players"]]
 z_index = 1
-collision_layer = 8
+collision_layer = 40
 collision_mask = 21
+script = ExtResource("1_aungr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, 0)
 shape = SubResource("RectangleShape2D_o4wqj")
 debug_color = Color(0.721569, 0.862745, 0.168627, 0.419608)
+
+[node name="FlagManager" parent="." instance=ExtResource("1_mokeu")]
+unique_name_in_owner = true

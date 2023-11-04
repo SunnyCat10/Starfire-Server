@@ -58,18 +58,19 @@ func _peer_disconnected(player_id):
 
 func send_world_state(world_state):
 	for player in ctf_lobby.player_list:
-		recive_world_state.rpc_id(player, world_state)
-	# recive_world_state.rpc(world_state)
-
+		if multiplayer.get_peers().has(player): # Anti Crash Messure!!!! TODO Add more of those!
+			recive_world_state.rpc_id(player, world_state)
+# TODO: To gracefully disconect crashed players, run periodic check if all the players in the game
+# lobby still connected, if not -> disconect them manually 
 
 func send_damage(player_id: int, damage: int):
 	receive_damage.rpc_id(player_id, damage)
 
 
 func send_ctf_start(sorted_list, start_time : float):
-	for player in sorted_list[Packets.CTF_TEAM_A]:
+	for player in sorted_list[Packets.CtfTeam.TEAM_A]:
 		receive_ctf_start.rpc_id(player, sorted_list, start_time)
-	for player in sorted_list[Packets.CTF_TEAM_B]:
+	for player in sorted_list[Packets.CtfTeam.TEAM_B]:
 		receive_ctf_start.rpc_id(player, sorted_list, start_time)
 
 

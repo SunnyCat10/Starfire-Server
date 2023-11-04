@@ -4,3 +4,10 @@ res://Scenes/Main/Server.tscn
 res://Scenes/Main/Server.gd
 res://Scenes/Entities/remote_player.tscn
 res://Scenes/Gamemodes/Ctf.tscn
+res://Scenes/Objectives/FlagpoleSERVER.tscn
+res://Scenes/Objectives/Flagpole.tscn
+res://Scenes/Objectives/Flagpole.gd
+res://Scenes/Managers/FlagManager.tscn
+res://Scenes/Managers/FlagManager.gd
+res://Scenes/Entities/RemotePlayer.gd
+res://Scenes/Gamemodes/Ctf.gd

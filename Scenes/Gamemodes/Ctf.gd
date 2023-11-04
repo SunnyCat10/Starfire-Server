@@ -1,6 +1,6 @@
 extends Node
 
-const MATCH_COOLDOWN_TIME : float = 10.0
+const MATCH_COOLDOWN_TIME : float = 3.0
 
 
 var lobby_id : int # maybe uneeded?
@@ -41,8 +41,7 @@ func start_game():
 	var starting_time : float = Time.get_unix_time_from_system() + MATCH_COOLDOWN_TIME
 	Packets.gamemode_started.emit(sorted_list, starting_time)
 	await get_tree().create_timer(MATCH_COOLDOWN_TIME).timeout
-	
-	# run the game logic here :D
+	setup_player_manager() # FOR NOW -> Remove after spawn system implementation
 
 
 func end_game():
@@ -63,12 +62,22 @@ func join_lobby(player_id : int):
 
 
 func sort_teams():
-	sorted_list[Packets.CTF_TEAM_A] = {}
-	sorted_list[Packets.CTF_TEAM_B] = {}
+	sorted_list[Packets.CtfTeam.TEAM_A] = {}
+	sorted_list[Packets.CtfTeam.TEAM_B] = {}
 	var first_team : bool = true
 	for player in player_list:
 		if first_team:
-			sorted_list[Packets.CTF_TEAM_A][player] = null
+			sorted_list[Packets.CtfTeam.TEAM_A][player] = null
 		else:
-			sorted_list[Packets.CTF_TEAM_B][player] = null
+			sorted_list[Packets.CtfTeam.TEAM_B][player] = null
 		first_team = not first_team
+
+
+func setup_player_manager():
+	for player in sorted_list[Packets.CtfTeam.TEAM_A]:
+		# TODO: Initiate remote player here!
+		get_parent().get_node(str(player)).flag_manager.setup_manager(Packets.CtfTeam.TEAM_A)
+	for player in sorted_list[Packets.CtfTeam.TEAM_B]:
+		# TODO: Initiate remote player here!
+		get_parent().get_node(str(player)).flag_manager.setup_manager(Packets.CtfTeam.TEAM_B)
+		
