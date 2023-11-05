@@ -75,10 +75,9 @@ func send_ctf_start(sorted_list, start_time : float):
 
 
 func send_gamemode_update(sorted_list, status_info, status_time : float):
-	status_info[Packets.StatusPacket.TEAM_ID] = Packets.CtfTeam.TEAM_A
+	print(status_info)
 	for player in sorted_list[Packets.CtfTeam.TEAM_A]:
 		receive_gamemode_update.rpc_id(player, status_info, status_time)
-	status_info[Packets.StatusPacket.TEAM_ID] = Packets.CtfTeam.TEAM_B
 	for player in sorted_list[Packets.CtfTeam.TEAM_B]:
 		receive_gamemode_update.rpc_id(player, status_info, status_time)
 

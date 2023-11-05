@@ -1,7 +1,9 @@
 extends Node
 
 const MATCH_COOLDOWN_TIME : float = 3.0
+const FLAGPOLE_IDENTIFIER : String = "Flagpole"
 
+@onready var objectives : Node = get_parent().get_node("ServerMap/Objectives")
 
 var lobby_id : int # maybe uneeded?
 
@@ -11,31 +13,22 @@ var sorted_list = {}
 var ally_score : int = 0
 var enemy_score : int = 0
 var timer : Timer
-var _max_players : int = 2
+var _max_players : int = 2 # TODO: change to 0 once lobby creation is ready
 var current_players : int = 0
 
 var flagpoles = {}
 
 var game_running : bool = false
 
-func setup_game(max_players : int, match_duration : int):
-	_max_players = max_players
-	
-	# ADD TIMER!!!
-	
-#	var player_id : int = multiplayer.get_unique_id()
-#	if (player_list["A"].has(player_id)):
-#		allied_team = player_list["A"]
-#		enemy_team = player_list["B"]
-#	else:
-#		allied_team = player_list["B"]
-#		enemy_team = player_list["A"]
-	
-	# set texture of the flags
+# TODO: Implement lobby creation from server!
+#func setup_game(max_players : int, match_duration : int):
+#	print("SET UP THE LOBBY!")
+#	_max_players = max_players
 
 
 func start_game():
 	print("Game started!")
+	setup_flags() # TODO: Move to setup_game
 	game_running = true
 	sort_teams()
 	var starting_time : float = Time.get_unix_time_from_system() + MATCH_COOLDOWN_TIME
@@ -80,4 +73,33 @@ func setup_player_manager():
 	for player in sorted_list[Packets.CtfTeam.TEAM_B]:
 		# TODO: Initiate remote player here!
 		get_parent().get_node(str(player)).flag_manager.setup_manager(Packets.CtfTeam.TEAM_B)
-		
+
+
+func setup_flags():
+	print("Bruh")
+	for objective in objectives.get_children():
+		print("HERE!!!")
+		if objective.name.contains(FLAGPOLE_IDENTIFIER):
+			print("FLAG FOUND!")
+			objective.setup_flag()
+			objective.flag_picked.connect(on_pickup_flag)
+			objective.flag_returned.connect(on_return_flag)
+			objective.flag_captured.connect(on_capture_flag)
+			flagpoles[objective.name] = objective
+
+
+# can be turned into one function:
+
+func on_pickup_flag(team_id : int, player_id : int):
+	var packet = [player_id, team_id, Packets.FlagStatus.FLAG_TAKEN]
+	Packets.gamemode_update.emit(sorted_list, packet, Time.get_unix_time_from_system())
+
+
+func on_return_flag(team_id : int):
+	var packet = ["", team_id, Packets.FlagStatus.FLAG_DROPPED]
+	Packets.gamemode_update.emit(sorted_list, packet, Time.get_unix_time_from_system())
+
+
+func on_capture_flag(team_id : int):
+	var packet = ["", team_id, Packets.FlagStatus.FLAG_CAPTURED]
+	Packets.gamemode_update.emit(sorted_list, packet, Time.get_unix_time_from_system())

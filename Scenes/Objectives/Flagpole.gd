@@ -1,6 +1,6 @@
 extends Area2D
 
-signal flag_picked(team_id : int)
+signal flag_picked(team_id : int, player_id : int)
 signal flag_captured(team_id : int)
 signal flag_returned(team_id : int)
 
@@ -18,7 +18,7 @@ func setup_flag():
 
 
 func pickup_flag(player : Node2D):
-	flag_picked.emit(flag_team_id)
+	flag_picked.emit(flag_team_id, player.name.to_int())
 	is_empty = true
 
 
