@@ -3,5 +3,10 @@ res://Scenes/Projectiles/GerbilProjectile.tscn
 res://Scenes/Gamemodes/Ctf.tscn
 res://Scenes/Objectives/Flagpole.tscn
 res://Scenes/Managers/FlagManager.tscn
-res://Scenes/Objectives/Flagpole.gd
+res://Scenes/Drops/flag.tscn
+res://Scenes/Drops/Flag.tscn
+res://Scenes/Drops/Flag.gd
+res://Scenes/Managers/FlagManager.gd
 res://Scenes/Gamemodes/Ctf.gd
+res://Scenes/Objectives/Flagpole.gd
+res://Scenes/Main/Server.gd

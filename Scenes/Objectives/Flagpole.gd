@@ -1,13 +1,13 @@
 extends Area2D
 
-signal flag_picked(team_id : int, player_id : int)
+signal flag_picked(player_id : int, flag_id : int)
 signal flag_captured(team_id : int)
 signal flag_returned(team_id : int)
 
 @export var flag_team_id : int
 
 var is_empty : bool = false
-
+var id : int
 
 func _ready():
 	body_entered.connect(on_body_entered)
@@ -18,7 +18,7 @@ func setup_flag():
 
 
 func pickup_flag(player : Node2D):
-	flag_picked.emit(flag_team_id, player.name.to_int())
+	flag_picked.emit(player.name.to_int(), id)
 	is_empty = true
 
 

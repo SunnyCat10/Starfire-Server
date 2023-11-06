@@ -16,7 +16,7 @@ var timer : Timer
 var _max_players : int = 2 # TODO: change to 0 once lobby creation is ready
 var current_players : int = 0
 
-var flagpoles = {}
+var flag_list = []
 
 var game_running : bool = false
 
@@ -76,22 +76,22 @@ func setup_player_manager():
 
 
 func setup_flags():
-	print("Bruh")
+	var flag_id : int = 0
 	for objective in objectives.get_children():
-		print("HERE!!!")
 		if objective.name.contains(FLAGPOLE_IDENTIFIER):
-			print("FLAG FOUND!")
 			objective.setup_flag()
 			objective.flag_picked.connect(on_pickup_flag)
 			objective.flag_returned.connect(on_return_flag)
 			objective.flag_captured.connect(on_capture_flag)
-			flagpoles[objective.name] = objective
+			flag_list.append(objective)
+			objective.id = flag_id
+			flag_id = flag_id + 1
 
 
 # can be turned into one function:
 
-func on_pickup_flag(team_id : int, player_id : int):
-	var packet = [player_id, team_id, Packets.FlagStatus.FLAG_TAKEN]
+func on_pickup_flag(player_id : int, flag_id : int):
+	var packet = [player_id, flag_id, Packets.FlagStatus.FLAG_TAKEN]
 	Packets.gamemode_update.emit(sorted_list, packet, Time.get_unix_time_from_system())
 
 
