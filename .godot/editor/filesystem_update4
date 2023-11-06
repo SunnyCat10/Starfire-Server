@@ -10,3 +10,4 @@ res://Scenes/Managers/FlagManager.gd
 res://Scenes/Gamemodes/Ctf.gd
 res://Scenes/Objectives/Flagpole.gd
 res://Scenes/Main/Server.gd
+res://Scenes/Main/Packets.gd

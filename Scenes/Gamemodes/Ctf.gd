@@ -81,8 +81,8 @@ func setup_flags():
 		if objective.name.contains(FLAGPOLE_IDENTIFIER):
 			objective.setup_flag()
 			objective.flag_picked.connect(on_pickup_flag)
-			objective.flag_returned.connect(on_return_flag)
-			objective.flag_captured.connect(on_capture_flag)
+#			objective.flag_returned.connect(on_return_flag)
+#			objective.flag_captured.connect(on_capture_flag)
 			flag_list.append(objective)
 			objective.id = flag_id
 			flag_id = flag_id + 1
@@ -91,15 +91,15 @@ func setup_flags():
 # can be turned into one function:
 
 func on_pickup_flag(player_id : int, flag_id : int):
-	var packet = [player_id, flag_id, Packets.FlagStatus.FLAG_TAKEN]
+	var packet = [Packets.Type.PICKUP_FLAG, player_id, flag_id]
 	Packets.gamemode_update.emit(sorted_list, packet, Time.get_unix_time_from_system())
 
 
-func on_return_flag(team_id : int):
-	var packet = ["", team_id, Packets.FlagStatus.FLAG_DROPPED]
-	Packets.gamemode_update.emit(sorted_list, packet, Time.get_unix_time_from_system())
+#func on_return_flag(team_id : int):
+#	var packet = ["", team_id, Packets.FlagStatus.FLAG_DROPPED]
+#	Packets.gamemode_update.emit(sorted_list, packet, Time.get_unix_time_from_system())
 
 
-func on_capture_flag(team_id : int):
-	var packet = ["", team_id, Packets.FlagStatus.FLAG_CAPTURED]
-	Packets.gamemode_update.emit(sorted_list, packet, Time.get_unix_time_from_system())
+#func on_capture_flag(team_id : int):
+#	var packet = ["", team_id, Packets.FlagStatus.FLAG_CAPTURED]
+#	Packets.gamemode_update.emit(sorted_list, packet, Time.get_unix_time_from_system())
