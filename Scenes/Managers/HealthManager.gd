@@ -2,7 +2,7 @@ extends Node
 
 signal died
 
-var max_health : int = 100
+@export var max_health : int = 40
 var current_health : int
 
 

@@ -82,11 +82,13 @@ func setup_player_manager() -> void:
 		remote_player = get_parent().get_node(str(player))
 		remote_player.flag_manager.setup_manager(Packets.CtfTeam.TEAM_A)
 		sorted_list[TEAM_A][player] = remote_player
+		remote_player.died.connect(on_player_death)
 	for player in sorted_list[Packets.CtfTeam.TEAM_B]:
 		# TODO: Initiate remote player here!
 		remote_player = get_parent().get_node(str(player))
 		remote_player.flag_manager.setup_manager(Packets.CtfTeam.TEAM_B)
 		sorted_list[TEAM_B][player] = remote_player
+		remote_player.died.connect(on_player_death)
 
 
 func setup_spawners() -> void:
@@ -159,21 +161,23 @@ func spawn_player(player : Node2D, team_id : int, spawn_delay : float) -> void:
 	player.spawn(spawn_location)
 
 
-func on_player_death(player_id : int) -> void:
-	var spawn_location : Vector2
-	var player : Node2D
-	if player_id in sorted_list[TEAM_A].keys():
-		spawn_location = get_spawn_location(TEAM_A)
-		player = sorted_list[TEAM_A][player_id]
-	elif player_id in sorted_list[TEAM_B].keys():
-		spawn_location = get_spawn_location(TEAM_B)
-		player = sorted_list[TEAM_B][player_id]
-	else:
-		pass
+func player_death(player_id : int) -> void:
 	var packet = [Packets.Type.PLAYER_DEATH, player_id]
 	Packets.gamemode_update.emit(sorted_list, packet, Packets.server_time())
-	packet = [Packets.Type.SPAWN_PLAYER, player_id, spawn_location]
-	Packets.gamemode_update.emit(sorted_list, packet, Packets.server_time() + RESPAWN_TIME)
-	await get_tree().create_timer(RESPAWN_TIME).timeout
-	player.spawn(spawn_location)
+
+
+func on_player_death(player_id : int) -> void:
+	player_death(player_id)
 	
+	var player : Node2D
+	var team_id : int
+	if player_id in sorted_list[TEAM_A].keys():
+		player = sorted_list[TEAM_A][player_id]
+		team_id = TEAM_A
+	elif player_id in sorted_list[TEAM_B].keys():
+		player = sorted_list[TEAM_B][player_id]
+		team_id = TEAM_B
+	else:
+		pass
+	
+	spawn_player(player, team_id, RESPAWN_TIME)
