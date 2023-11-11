@@ -15,6 +15,8 @@ func _ready():
 func spawn(spawn_position : Vector2):
 	global_position = spawn_position
 	rotation = 0
+	
+	
 	health_manager.spawn()
 	# global_position = spawn_position
 	collision_shape.set_deferred("disabled", false)
@@ -30,4 +32,6 @@ func on_death():
 	is_alive = false
 	died.emit(name.to_int())
 	collision_shape.set_deferred("disabled", true)
+	if flag_manager.with_flag:
+		flag_manager.drop_flag()
 	

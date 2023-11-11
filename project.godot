@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Packets="*res://Scenes/Main/Packets.gd"
+Events="*res://Utilities/Events.gd"
 
 [dotnet]
 

@@ -24,6 +24,7 @@ var current_players : int = 0
 var flag_list = []
 var spawner_list = {Packets.CtfTeam.TEAM_A : [], Packets.CtfTeam.TEAM_B : []}
 var random = RandomNumberGenerator.new()
+var flag_drop_list = [null, null]
 
 var game_running : bool = false
 
@@ -78,17 +79,29 @@ func sort_teams() -> void:
 func setup_player_manager() -> void:
 	var remote_player : Node2D
 	for player in sorted_list[Packets.CtfTeam.TEAM_A]:
+		setup_player(player, TEAM_A, sorted_list)
 		# TODO: Initiate remote player here!
-		remote_player = get_parent().get_node(str(player))
-		remote_player.flag_manager.setup_manager(Packets.CtfTeam.TEAM_A)
-		sorted_list[TEAM_A][player] = remote_player
-		remote_player.died.connect(on_player_death)
+#		remote_player = get_parent().get_node(str(player))
+#		remote_player.flag_manager.setup_manager(Packets.CtfTeam.TEAM_A)
+#		remote_player.flag_manager.flag_dropped.connect(on_flag_drop)
+#		sorted_list[TEAM_A][player] = remote_player
+#		remote_player.died.connect(on_player_death)
 	for player in sorted_list[Packets.CtfTeam.TEAM_B]:
-		# TODO: Initiate remote player here!
-		remote_player = get_parent().get_node(str(player))
-		remote_player.flag_manager.setup_manager(Packets.CtfTeam.TEAM_B)
-		sorted_list[TEAM_B][player] = remote_player
-		remote_player.died.connect(on_player_death)
+		setup_player(player, TEAM_B, sorted_list)
+#		remote_player = get_parent().get_node(str(player))
+#		remote_player.flag_manager.setup_manager(Packets.CtfTeam.TEAM_B)
+#		remote_player.flag_manager.flag_dropped.connect(on_flag_drop)
+#		sorted_list[TEAM_B][player] = remote_player
+#		remote_player.died.connect(on_player_death)
+
+
+func setup_player(player_id : int, player_team : int, player_list) -> void:
+	# TODO: Initiate remote player here!
+	var remote_player : Node2D = get_parent().get_node(str(player_id))
+	remote_player.flag_manager.setup_manager(player_team)
+	remote_player.flag_manager.flag_dropped.connect(on_flag_drop)
+	player_list[player_team][player_id] = remote_player
+	remote_player.died.connect(on_player_death)
 
 
 func setup_spawners() -> void:
@@ -181,3 +194,18 @@ func on_player_death(player_id : int) -> void:
 		pass
 	
 	spawn_player(player, team_id, RESPAWN_TIME)
+
+
+func on_flag_drop(player_id : int, flag_drop : Node2D) -> void:
+	var item_id : int
+	if flag_drop._flag_team_id == TEAM_A:
+		flag_drop_list[TEAM_A] = flag_drop
+		item_id = TEAM_A
+	elif flag_drop._flag_team_id == TEAM_B:
+		flag_drop_list[TEAM_B] = flag_drop
+		item_id = TEAM_B
+	else:
+		pass
+	
+	var packet = [Packets.Type.DROP_ITEM, 0, item_id, flag_drop.global_position, player_id]
+	Packets.gamemode_update.emit(sorted_list, packet, Packets.server_time())
