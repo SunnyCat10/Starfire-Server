@@ -5,8 +5,6 @@ res://Scenes/Objectives/Flagpole.tscn
 res://Scenes/Managers/FlagManager.tscn
 res://Scenes/Drops/Flag.tscn
 res://Scenes/Entities/remote_player.tscn
-res://Scenes/Main/Packets.gd
-res://Scenes/Managers/FlagManager.gd
+res://Scenes/Drops/Flag.gd
 res://Scenes/Entities/RemotePlayer.gd
-res://Utilities/Events.gd
-res://Scenes/Gamemodes/Ctf.gd
+res://Scenes/Objectives/Flagpole.gd

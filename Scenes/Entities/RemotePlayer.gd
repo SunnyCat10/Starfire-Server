@@ -15,11 +15,9 @@ func _ready():
 func spawn(spawn_position : Vector2):
 	global_position = spawn_position
 	rotation = 0
-	
-	
 	health_manager.spawn()
-	# global_position = spawn_position
 	collision_shape.set_deferred("disabled", false)
+	await get_tree().create_timer(1).timeout
 	is_alive = true
 
 

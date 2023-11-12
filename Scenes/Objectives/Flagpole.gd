@@ -23,7 +23,7 @@ func pickup_flag(player : Node2D):
 	is_empty = true
 
 
-func return_flag(client_team_id : int):
+func return_flag():
 	flag_returned.emit(flag_team_id)
 	setup_flag()
 	is_empty = false
