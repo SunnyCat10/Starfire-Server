@@ -8,3 +8,7 @@ res://Scenes/Entities/remote_player.tscn
 res://Scenes/Drops/Flag.gd
 res://Scenes/Entities/RemotePlayer.gd
 res://Scenes/Objectives/Flagpole.gd
+res://Scenes/Main/Packets.gd
+res://Scenes/Managers/FlagManager.gd
+res://Scenes/Gamemodes/Ctf.gd
+res://Utilities/Events.gd

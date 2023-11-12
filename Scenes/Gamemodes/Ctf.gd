@@ -24,9 +24,14 @@ var current_players : int = 0
 var flag_list = []
 var spawner_list = {Packets.CtfTeam.TEAM_A : [], Packets.CtfTeam.TEAM_B : []}
 var random = RandomNumberGenerator.new()
-var flag_drop_list = [null, null]
+var flag_drop_list = [null, null] # We don`t really use this
 
 var game_running : bool = false
+
+
+func _ready():
+	Events.OnItemPickup.connect(on_flag_pickup)
+
 
 # TODO: Implement lobby creation from server!
 #func setup_game(max_players : int, match_duration : int):
@@ -80,19 +85,8 @@ func setup_player_manager() -> void:
 	var remote_player : Node2D
 	for player in sorted_list[Packets.CtfTeam.TEAM_A]:
 		setup_player(player, TEAM_A, sorted_list)
-		# TODO: Initiate remote player here!
-#		remote_player = get_parent().get_node(str(player))
-#		remote_player.flag_manager.setup_manager(Packets.CtfTeam.TEAM_A)
-#		remote_player.flag_manager.flag_dropped.connect(on_flag_drop)
-#		sorted_list[TEAM_A][player] = remote_player
-#		remote_player.died.connect(on_player_death)
 	for player in sorted_list[Packets.CtfTeam.TEAM_B]:
 		setup_player(player, TEAM_B, sorted_list)
-#		remote_player = get_parent().get_node(str(player))
-#		remote_player.flag_manager.setup_manager(Packets.CtfTeam.TEAM_B)
-#		remote_player.flag_manager.flag_dropped.connect(on_flag_drop)
-#		sorted_list[TEAM_B][player] = remote_player
-#		remote_player.died.connect(on_player_death)
 
 
 func setup_player(player_id : int, player_team : int, player_list) -> void:
@@ -119,7 +113,7 @@ func setup_flags() -> void:
 		if objective.name.contains(FLAGPOLE_IDENTIFIER):
 			objective.setup_flag()
 			objective.flag_picked.connect(on_pickup_flag)
-#			objective.flag_returned.connect(on_return_flag)
+			# objective.flag_returned.connect(on_return_flag)
 			objective.flag_captured.connect(on_capture_flag)
 			flag_list.append(objective)
 			objective.id = flag_id
@@ -142,12 +136,11 @@ func on_pickup_flag(player_id : int, flag_id : int) -> void:
 	Packets.gamemode_update.emit(sorted_list, packet, Packets.server_time())
 
 
-#func on_return_flag(team_id : int):
-#	var packet = ["", team_id, Packets.FlagStatus.FLAG_DROPPED]
-#	Packets.gamemode_update.emit(sorted_list, packet, Time.get_unix_time_from_system())
+func on_flag_pickup(item_type : int, item_id : int, player_id : int) -> void:
+	var packet = [Packets.Type.PICKUP_ITEM, Packets.ItemType.FLAG, item_id, player_id]
+	Packets.gamemode_update.emit(sorted_list, packet, Packets.server_time())
 
 
-#func on_capture_flag(team_id : int):
 func on_capture_flag(player_id : int, flag_id : int) -> void:
 	var packet = [Packets.Type.CAPTURE_FLAG, player_id, flag_id]
 	Packets.gamemode_update.emit(sorted_list, packet, Packets.server_time())
